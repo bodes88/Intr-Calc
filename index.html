@@ -1,0 +1,385 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>Interest Rate Calculator</title>
+</head>
+<body>
+    <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+        <form id="myForm">
+        <select id="SCInt" onchange="SCIntCalc()">
+            <option value="select">Select Interest Calculator</option>
+            <option value="simple">Simple Interest</option>
+            <option value="compound">Compound Interest</option>
+        </select>
+        </br>
+        <div class="Simple" style="display:none">
+            <p>Principal Deposit Value</p>
+            <p>$ <input id="deposit" onkeyup="depositValue()"</input></p>
+            <p id="depValue"></p>
+        </div>
+        <div class="Compound" style="display:none">
+            <p>Frequent Deposit Value</p>
+            <p>$ <input id="depFreq" onkeyup="depositFrequence()"</input></p>
+            <p id="depFreqvalue"></p>
+            <p>
+                Deposit Frequency: <select id="frequency" onchange="freq()">
+                    <option value="select">Please Select</option>
+                    <option value="weekly">Weekly</option>
+                    <option value="fortnightly">Fortnightly</option>
+                    <option value="monthly">Monthly</option>
+                </select>
+
+            </p>
+            <p class="Hidden" id="hiddenValue" style="display:none"></p>
+            <p class="Hidden" id="hiddenValue2" style="display:none"></p>
+
+            <p>
+                Compound Frequency: <select id="compFreq" onchange="compoundFrequency()">
+                    <option value="select">Please Select</option>
+                    <option value="monthly">Monthly</option>
+                    <option value="annually">Annual</option>
+                </select>
+            </p>
+            </br>
+
+        </div>
+        <p>Interest Rate Percentage</p>
+        <input id="interest" />
+        <button type="button" onclick="interestRate()">Submit</button>
+        </br>
+        <p id="intRate"></p>
+        <input id="checkBox1" name="myGroup" type="radio" onclick="tick()"> My Saver </input>
+        </br>
+        <input id="checkBox2" name="myGroup" type="radio" onclick="tick()"> Bonus Saver </input>
+        </br>
+        <input id="checkBox3" name="myGroup" type="radio" onclick="tick()"> Pension Saver </input>
+        </br>
+        <p>Deposit Period</p>
+        <input id="period" />
+        <button type="button" onclick="depositPeriod()">Submit</button>
+        </br>
+        <input type="range" id="range" name="Years" min="0" max="30" value="0" onchange="depositRange()">
+        <label for="Years">Years</label>
+        <p id="length"></p>
+        <p id="demo"></p>
+        <p id="calculations"></p>
+        </br>
+        <div class="Simple" style="display:none">
+            <button type="button" onclick="calculate()">Calculate</button>
+            </br>
+        </div>
+        <div class="Compound" style="display:none">
+            <button type="button" onclick="calculate2()">Calculate2</button>
+        </div>
+        <button onclick="reset()">Reset</button>
+    </form>
+    <script>
+
+    function depositValue() {
+
+      var c = document.getElementById("deposit").value;
+      c = c.replace(',', '');
+      var parse = parseFloat(c);
+      var invalid = "Enter a valid deposit value"
+      var result = invalid.fontcolor("red");
+
+        if (isNaN(c) || c < 1 || c > 300000) {
+
+            document.getElementById("depValue").innerHTML = result;
+
+        } else {
+
+            document.getElementById("depValue").innerHTML = ("$" + parse);
+
+        }
+    }
+
+
+    function depositFrequence() {
+
+        var a = document.getElementById("depFreq").value;
+        a = a.replace(',', '');
+        var parse = parseFloat(a);
+        var invalid = "Enter a valid regular deposit value"
+        var result = invalid.fontcolor("red");
+
+            if (isNaN(a) || a < 1) {
+
+                document.getElementById("depFreqvalue").innerHTML = result;
+
+            } else {
+
+                document.getElementById("depFreqvalue").innerHTML = ("$" + parse);
+
+            }
+    }
+
+    function freq() {
+
+        var a = document.getElementById("frequency");
+
+            switch (a.value) {
+
+                case 'select':
+                    document.getElementById("hiddenValue").innerHTML = "";
+                    console.log("blank");
+                break;
+
+                case 'weekly':
+                    document.getElementById("hiddenValue").innerHTML = 52;
+                    console.log("52 weeks");
+                break;
+
+                case 'fortnightly':
+                    document.getElementById("hiddenValue").innerHTML = 26;
+                    console.log("26 fortnights");
+                break;
+
+                case 'monthly':
+                    document.getElementById("hiddenValue").innerHTML = 12;
+                    console.log("12 months");
+                break;
+
+            }
+
+    }
+
+    // Do I Even Need This?
+
+    function compoundFrequency() {
+
+        var a = document.getElementById("compFreq");
+        var b = document.getElementById("intRate").innerHTML;
+        b = b.replace("%", "");
+        var parse = parseFloat(b);
+        var c = document.getElementById("length").innerHTML;
+        c = c.replace(" years", "");
+        var parse2 = parseFloat(c);
+        var monthly = ((parse / 12) / 100) + 1;
+        var monthlycomp = parse2 * 12
+        var annually = (parse / 100) + 1;
+
+            switch (a.value) {
+
+            case 'select':
+                document.getElementById("hiddenValue2").innerHTML = "";
+                console.log("blank");
+            break;
+
+            case 'monthly':
+                document.getElementById("hiddenValue2").innerHTML = Math.pow(monthly, monthlycomp);
+                console.log(Math.pow(monthly, monthlycomp));
+            break;
+
+            case 'annually':
+                document.getElementById("hiddenValue2").innerHTML = Math.pow(annually, parse2);
+                console.log(Math.pow(annually, parse2));
+            break;
+
+            }
+    }
+
+
+    function interestRate() {
+
+      var x = document.getElementById("interest").value;
+      var parse = parseFloat(x);
+      var invalid = "Enter a valid interest rate";
+      var result = invalid.fontcolor("red");
+
+      if (isNaN(x) || x < 1 || x > 10) {
+
+      document.getElementById("checkBox1").checked = false;
+      document.getElementById("checkBox2").checked = false;
+      document.getElementById("checkBox3").checked = false;
+      document.getElementById("intRate").innerHTML = result;
+
+
+      } else {
+
+      document.getElementById("checkBox1").checked = false;
+      document.getElementById("checkBox2").checked = false;
+      document.getElementById("checkBox3").checked = false;
+      document.getElementById("intRate").innerHTML = (parse + "%");
+
+      }
+    }
+
+
+
+    function depositRange() {
+
+      var y = document.getElementById("range").value;
+      var parse = parseFloat(y);
+      var invalid = "Deposit Length can not be 0";
+      var result = invalid.fontcolor("red");
+
+
+      if (isNaN(y) || y < 1 || y > 30) {
+
+        document.getElementById("length").innerHTML = result;
+
+      } else {
+
+        document.getElementById("length").innerHTML = (parse + " years");
+
+      }
+    }
+
+    function depositPeriod() {
+
+      var y = document.getElementById("period").value;
+      var parse = parseFloat(y);
+      var invalid = "Enter in valid deposit period (1-30 years)";
+      var result = invalid.fontcolor("red");
+
+      if (isNaN(y) || y < 1 || y > 30) {
+
+        document.getElementById("length").innerHTML = result;
+
+      } else {
+
+        document.getElementById("length").innerHTML = (parse + " years");
+        document.getElementById("range").value = parse;
+
+      }
+    }
+
+    function tick() {
+
+        var array = [(2.5 + "%"), (Math.round((2.55 + 0.15) * 100) / 100 + "%"), (2.1 + "%"), null];
+
+            if (checkBox1.checked == true) {
+            document.getElementById("intRate").innerHTML = array[0];
+            } else if (checkBox2.checked == true) {
+                    document.getElementById("intRate").innerHTML = array[1];
+            } else if (checkBox3.checked == true) {
+                    document.getElementById("intRate").innerHTML = array[2];
+            } else {
+                document.getElementById("intRate").innerHTML = array[3];
+            }
+    }
+
+    function SCIntCalc() {
+
+        var x = document.getElementById("SCInt");
+
+            switch (x.value) {
+                case 'select':
+
+                var a = document.getElementsByClassName('Simple');
+                var b = document.getElementsByClassName('Compound');
+
+                for (var i=0; i<a.length; i+=1){
+                a[i].style.display = 'none';
+                }
+                for (var i=0; i<b.length; i+=1){
+                b[i].style.display = 'none';
+                }
+                break;
+
+            case 'simple':
+
+                var a = document.getElementsByClassName('Simple');
+                var b = document.getElementsByClassName('Compound');
+
+                for (var i=0; i<a.length; i+=1){
+                a[i].style.display = 'block';
+                }
+                for (var i=0; i<b.length; i+=1){
+                b[i].style.display = 'none';
+                }
+                break;
+
+            case 'compound':
+                var b = document.getElementsByClassName('Compound');
+                var a = document.getElementsByClassName('Simple');
+
+                for (var i=0; i<b.length; i+=1){
+                b[i].style.display = 'block';
+                }
+                for (var i=0; i<a.length; i+=1){
+                a[i].style.display = 'block';
+                }
+                break;
+            }
+
+    }
+
+    function calculate() {
+            var a = document.getElementById("depValue").innerHTML;
+            a = a.replace("$", "");
+            var parse = parseFloat(a);
+            var b = document.getElementById("intRate").innerHTML;
+            b = b.replace("%", "");
+            var parse1 = (parseFloat(b) / 100);
+            var c = document.getElementById("length").innerHTML;
+            c = c.replace(" years", "");
+            var parse2 = parseFloat(c);
+            var invalid = "Invalid Values";
+            var result = invalid.fontcolor("red");
+
+            if ((0 < parse && parse < 300000) && parse1 < 1 && parse2 <= 30)  {
+
+            document.getElementById("demo").innerHTML = ("$" + Math.round((parse * parse1 * parse2) + 0.00001 * 100 / 100) + " total interest earned.");
+
+                var d = document.getElementById("demo").innerHTML;
+                d = d.replace(" total interest earned.", ""),
+                d = d.replace("$", "");
+                var parse3 = parseFloat(d);
+
+
+                document.getElementById("calculations").innerHTML = "$" + (parse3 + parse) + " at maturity.";
+
+            } else {
+
+            document.getElementById("demo").innerHTML = result;
+
+            }
+
+    }
+
+function calculate2() {
+
+    var a = document.getElementById("depValue").innerHTML;
+    a = a.replace("$", "");
+    var parse = parseFloat(a);
+    var hidden = document.getElementById("hiddenValue2").innerHTML;
+    var parsehidden = parseFloat(hidden);
+    var invalid = "Invalid Values";
+    var result = invalid.fontcolor("red");
+
+        if ((0 < parse && parse < 300000) && (0 < parsehidden && parsehidden < 2))  {
+
+        document.getElementById("demo").innerHTML = ("$" + Math.round((parse * parsehidden) + 0.00001 * 100 / 100) + " total interest earned.");
+
+        var d = document.getElementById("demo").innerHTML;
+        d = d.replace(" total interest earned.", ""),
+        d = d.replace("$", "");
+        var parse3 = parseFloat(d);
+
+
+        document.getElementById("calculations").innerHTML = "$" + (parse3 + parse) + " at maturity.";
+
+        } else {
+
+        document.getElementById("demo").innerHTML = result;
+
+        }
+
+}
+
+
+
+
+
+    function reset() {
+
+            document.getElementById("myForm").value = "";
+
+    }
+    </script>
+</body>
+
+    </html>
+
