@@ -1,0 +1,248 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<title>Compound Interest Calculator</title>
+</head>
+<body>
+    <form id="CompoundForm">
+        <label>Principal Deposit Value: <input id="deposit" type="text" placeholder="Enter initial deposit" onkeyup="depositValue()"</label>
+        <p id="depValue"></p>
+        <label>Interest Rate Percentage: <input id="interest" type="text" placeholder="Enter interest rate" onkeyup="interestRate()"</label>
+        <p id="intRate"></p>
+        <p>Deposit Period</p>
+        <input id="period" />
+        <button type="button" onclick="depositPeriod()">Submit</button>
+        </br>
+        <input type="range" id="range" name="Years" min="0" max="30" value="0" onchange="slider()">
+        <label for="Years">Years</label>
+        <p id="length"></p>
+        <p>
+            Compound Frequency: <select id="compFreq" onchange="compoundFrequency()">
+                <option id="select" value="select">Please Select</option>
+                <option id="monthly" value ="monthly">Monthly</option>
+                <option id="annually" value ="annually">Annual</option>
+            </select>
+        </p>
+        <p id="hiddenDeposit" style="display:none"></p>
+        <p id="hiddenSelector" style="display:none"></p>
+        <p id="hiddenMonth" style="display:none"></p>
+        <p id="hiddenAnnual" style="display:none"></p>
+        <p id="answer"></p>
+        <button type="button" onclick="calculate()">Calculate</button>
+        <button onclick="reset()">Reset</button>
+    </form>
+<script>
+
+function depositValue() {
+
+        var enteredValue = document.getElementById("deposit").value;
+        enteredValue = enteredValue.replace(',', '');
+        var parse = parseFloat(enteredValue);
+        var invalid = "Enter a valid deposit value"
+        var result = invalid.fontcolor("red");
+
+        if (isNaN(enteredValue) || enteredValue < (0.01) || enteredValue > 3000000) {
+
+            document.getElementById("depValue").innerHTML = result;
+
+        } else {
+
+            document.getElementById("depValue").innerHTML = parse.toLocaleString('en-AU', { style: 'currency', currency: 'AUD' });
+
+
+            document.getElementById("hiddenDeposit").innerHTML = enteredValue.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+//            document.getElementById("hiddenDeposit").innerHTML = parse;
+            console.log(enteredValue);
+        }
+}
+
+/* function compoundFrequency() {
+
+        var a = document.getElementById("deposit").value;
+        var parsea = parseFloat(a);
+        var b = document.getElementById("intRate").innerHTML;
+        b = b.replace("%", "");
+        var parse = parseFloat(b);
+        var c = document.getElementById("length").innerHTML;
+        c = c.replace(" years", "");
+
+    console.log(parsea);
+    console.log(b);
+    console.log(c);
+
+}
+*/
+
+
+
+
+    function compoundFrequency() {
+
+        var x = document.getElementById("compFreq");
+
+            switch (x.value) {
+            case 'select':
+                
+                break;
+
+            case 'monthly':
+
+                        document.getElementById("hiddenSelector").innerHTML = "monthly";
+                        console.log(document.getElementById("hiddenSelector").innerHTML);
+                        
+                break;
+
+            case 'annually':
+
+                        document.getElementById("hiddenSelector").innerHTML = "annually";
+                        console.log(document.getElementById("hiddenSelector").innerHTML);
+
+
+            break;
+           }
+           
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+function interestRate() {
+
+    var x = document.getElementById("interest").value;
+    var parse = parseFloat(x);
+    var invalid = "Enter a valid interest rate";
+    var result = invalid.fontcolor("red");
+
+    if (isNaN(x) || x < 1 || x > 10) {
+
+    document.getElementById("intRate").innerHTML = result;
+
+    } else {
+
+    document.getElementById("intRate").innerHTML = (parse + "%");
+
+    }
+}
+
+function depositPeriod() {
+
+      var y = document.getElementById("period").value;
+      var parseY = parseFloat(y);
+      var invalid = "Enter in valid deposit period (1-30 years)";
+      var result = invalid.fontcolor("red");
+
+      if (isNaN(y) || y < 1 || y > 30) {
+
+        document.getElementById("length").innerHTML = result;
+
+      } else {
+
+        document.getElementById("length").innerHTML = (parseY + " years");
+        document.getElementById("range").value = parseY;
+
+      }
+}
+
+
+    function slider() {
+
+      var y = document.getElementById("range").value;
+      var parse = parseFloat(y);
+      var invalid = "Deposit Length can not be 0";
+      var result = invalid.fontcolor("red");
+
+
+      if (isNaN(y) || y < 1 || y > 30) {
+
+        document.getElementById("length").innerHTML = result;
+
+      } else {
+
+        document.getElementById("length").innerHTML = (parse + " years");
+
+      }
+    }
+
+function calculate() {
+
+        var deposit = document.getElementById("deposit").value;
+        var interest = document.getElementById("intRate").innerHTML;
+        interest = interest.replace("%", "");
+        var length = document.getElementById("period").innerHTML;
+        length = length.replace(" years", "");
+
+
+        if ((document.getElementById('compFreq').value == "monthly") && (deposit, interest, length = !isNaN)) {
+
+            document.getElementById("answer").innerHTML = "Positive" && console.log("Positive Test");
+            chart();
+
+        } else if (document.getElementById('compFreq').value == "annually") {
+
+            document.getElementById("answer").innerHTML = "Negative" && console.log("Negative Test");
+            chart();
+
+        } else {
+
+            console.log("failed test");
+
+        }
+    }
+
+function reset() {
+
+            document.getElementById("CompoundForm").value = "";
+
+
+    }
+
+
+    function chart() {
+
+var chart = new CanvasJS.Chart("chartContainer", {
+    animationEnabled: true,  
+    title:{
+        text: "Value Over Time"
+    },
+    axisY: {
+        title: "Principal & Interest",
+        valueFormatString: "#0,,.",
+        suffix: ".00",
+        prefix: "$"
+    },
+    data: [{
+        type: "splineArea",
+        color: "rgba(54,158,173,.7)",
+        markerSize: 5,
+        xValueFormatString: "YYYY",
+        yValueFormatString: "$#,##0.##",
+        dataPoints: [
+            { x: new Date(2000, 0), y: 3289000 },
+            { x: new Date(2001, 0), y: 3830000 },
+            { x: new Date(2002, 0), y: 2009000 },
+            { x: new Date(2003, 0), y: 2840000 },
+            { x: new Date(2004, 0), y: 2396000 }
+        ]
+    }]
+    });
+chart.render();
+
+}
+
+
+    </script>
+
+
+<div id="chartContainer" style="height: 300px; width: 100%;"></div>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+</body>
+</html>
+
