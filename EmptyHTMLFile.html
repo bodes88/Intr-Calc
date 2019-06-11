@@ -205,36 +205,54 @@ function reset() {
     }
 
 
-    function chart() {
+    // numberOfYears as a parameter
+    function chart(numberOfYears) {
 
-var chart = new CanvasJS.Chart("chartContainer", {
-    animationEnabled: true,  
-    title:{
-        text: "Value Over Time"
-    },
-    axisY: {
-        title: "Principal & Interest",
-        valueFormatString: "#0,,.",
-        suffix: ".00",
-        prefix: "$"
-    },
-    data: [{
-        type: "splineArea",
-        color: "rgba(54,158,173,.7)",
-        markerSize: 5,
-        xValueFormatString: "YYYY",
-        yValueFormatString: "$#,##0.##",
-        dataPoints: [
-            { x: new Date(2000, 0), y: 3289000 },
-            { x: new Date(2001, 0), y: 3830000 },
-            { x: new Date(2002, 0), y: 2009000 },
-            { x: new Date(2003, 0), y: 2840000 },
-            { x: new Date(2004, 0), y: 2396000 }
-        ]
-    }]
+        // data to supply to datapoints property of object supplied to CanvasJS.Chart
+        const data = [];
+        // you could choose this as the current year or let the use input it
+        let startYear = new Date(2000, 0);
+
+        for (let i = 0; i < numberOfYears; i++){
+            // increment the year
+            const year = startYear.getFullYear() + 1;
+            const dateForX_Axis = startYear.setFullYear(year);
+            // you need to write the calculateYvalue function
+            const yValue = calculateYvalue(dateForX_Axis);
+            // create an object to puch into the data array
+            const dataPoint = {x: dateForX_Axis, y: yValue};
+            data.push(dataPoint);
+        }
+
+        var chart = new CanvasJS.Chart("chartContainer", {
+                animationEnabled: true,
+                title:{
+                text: "Value Over Time"
+            },
+            axisY: {
+                title: "Principal & Interest",
+                valueFormatString: "#0,,.",
+                suffix: ".00",
+                prefix: "$"
+            },
+            data: [{
+                type: "splineArea",
+                color: "rgba(54,158,173,.7)",
+                markerSize: 5,
+                xValueFormatString: "YYYY",
+                yValueFormatString: "$#,##0.##",
+                // use the data you just created above
+                datapoints: data
+            // dataPoints: [
+            //     { x: new Date(2000, 0), y: 3289000 },
+            //     { x: new Date(2001, 0), y: 3830000 },
+            //     { x: new Date(2002, 0), y: 2009000 },
+            //     { x: new Date(2003, 0), y: 2840000 },
+            //     { x: new Date(2004, 0), y: 2396000 }
+            // ]
+            }]
     });
-chart.render();
-
+    chart.render();
 }
 
 
