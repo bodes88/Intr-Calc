@@ -260,7 +260,7 @@ function chart(plots){
     var deposit = parseInt(document.getElementById("deposit").value);
     
 
-        for (var i = 0; i < plots; i++) {
+        for (var i = 0; i <= plots; i++) {
             var increment = date + i;
             var intmonth = monthly();
 //            var climbPoint = (deposit * (Math.pow(intmonth, plots))).toLocaleString('en-AU', { style: 'currency', currency: 'AUD' })
