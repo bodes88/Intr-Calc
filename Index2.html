@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+
+        <!-- ChartJS Core Library for Chart -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+
+    <title>Compound Interest Calculator</title>
+    <style>
+        body {
+            font-family: Tahoma, Arial, Helvetica, sans-serif;
+            font-size: small;
+            }
+    </style>
+</head>
+    <body>
+        <form id="CompoundForm">
+            <label>Principal Deposit Value: <input id="deposit" type="text" placeholder="Enter initial deposit" onkeyup="depositValue()"</label>
+            <p id="depValue"></p>
+            <label>Interest Rate Percentage: <input id="interest" type="text" placeholder="Enter interest rate" onkeyup="interestRate()"</label>
+            <p id="intRate"></p>
+            <p>Deposit Period</p>
+            <input id="period" type="number" />
+            <button type="button" onclick="depositPeriod()">Submit</button>
+            </br>
+            <input type="range" id="range" name="Years" min="0" max="30" value="0" onchange="slider()">
+            <label for="Years">Years</label>
+            <p id="length"></p>
+            <p>
+                Compound Frequency: <select id="compFreq" onchange="compoundFrequency()">
+                    <option id="select" value="select">Please Select</option>
+                    <option id="monthly" value="monthly">Monthly</option>
+                    <option id="annually" value="annually">Annual</option>
+                                    </select>
+            </p>
+            <p id="compoundResponse"></p>
+            <p id="answer"></p>
+            <button type="button" onclick="calculate()">Calculate</button>
+            <button onclick="reset()">Reset</button>
+        </form>
+
+
+        <script>
+
+            // depositValue() : onkeyup function when typing in Principal Deposit values, converts to AUD currency.
+            // depValue : Paragraph ID displays when Principal Deposit value is entered.
+            // interestR() : Call function used to strip string from Interest Rate number.
+            // interestRate() : onkeyup function when typing in an Interest Rate
+            // intRate : Paragraph ID displays when Interest Rate is entered.
+            // getRange() : Call function used within slider() function variable.
+            // depositPeriod() : onclick button function for defining a deposit term.
+            // slider() : Range function to determine deposit term.
+            // compoundFrequency() : onchange function determining the frequency of compounded interest - Monthly/Annually
+            // compounder : Paragraph ID for changing fontcolour due to invalid Compound selection
+            // compoundResponse : Paragraph ID displays when no compoundFrequency() is defined
+            // monthly() : Call function determining base multiplier for calculating monthly compounded interest
+            // annual() : Call function determining base multiplier for calculating annual compounded interest
+            // calculate() : onclick function that calculates Form data.
+            // reset() : onclick function that resets Form data.
+
+
+function depositValue() {
+
+            var enteredValue = document.getElementById("deposit").value;
+            enteredValue = enteredValue.replace(',', '');
+            var parse = parseFloat(enteredValue);
+            var invalid = "Enter a valid deposit value";
+            var result = invalid.fontcolor("red");
+
+            if (isNaN(enteredValue) || enteredValue < (0.01) || enteredValue > 3000000) {
+
+                document.getElementById("depValue").innerHTML = result;
+
+            } else {
+
+                document.getElementById("depValue").innerHTML = parse.toLocaleString('en-AU', { style: 'currency', currency: 'AUD' });
+
+                console.log(enteredValue);
+            }
+            }
+
+
+function interestR() {
+
+    var interest = document.getElementById("intRate").innerHTML;
+    interest = interest.replace("%", "");
+    return interest;
+
+}
+
+function interestRate() {
+
+            var interest = document.getElementById("interest").value;
+            var parse = parseFloat(interest);
+            var invalid = "Enter a valid interest rate";
+            var result = invalid.fontcolor("red");
+
+            if (isNaN(interest) || interest < 1 || interest > 10) {
+
+                document.getElementById("intRate").innerHTML = result;
+
+            } else {
+
+                document.getElementById("intRate").innerHTML = (parse + "%");
+
+            }
+        }
+
+
+
+
+function getRange() {
+
+            var Range = Number(document.getElementById("range").value);
+            return Range;
+
+        }
+
+
+function depositPeriod() {
+
+            var term = document.getElementById("period").value;
+            var parseTerm = parseFloat(term);
+            var invalid = "Enter in valid deposit period (1-30 years)";
+            var result = invalid.fontcolor("red");
+
+            if (isNaN(term) || term < 1 || term > 30) {
+
+                document.getElementById("length").innerHTML = result;
+
+            } else {
+
+                document.getElementById("length").innerHTML = (parseTerm + " years");
+                document.getElementById("range").value = parseTerm;
+
+            }
+        }
+
+
+
+function slider() {
+
+            var years = getRange();
+            var invalid = "Deposit Length can not be 0";
+            var result = invalid.fontcolor("red");
+
+
+            if (isNaN(years) || years < 1 || years > 30) {
+
+                document.getElementById("length").innerHTML = result;
+
+            } else {
+
+                document.getElementById("length").innerHTML = (years + " years");
+         
+            }
+        }
+
+
+function compoundFrequency() {
+
+            var compFreq = document.getElementById("compFreq");
+            var invalid = "Please define a compound frequency above.";
+            var result = invalid.fontcolor("red");
+
+            switch (compFreq.value) {
+                case 'select':
+
+                    document.getElementById("compoundResponse").innerHTML = result;
+                    
+                    break;
+
+                case 'monthly':
+
+                    monthly();
+                    document.getElementById("compoundResponse").innerHTML = "";
+                    break;
+
+                case 'annually':
+
+                    annual();
+                    document.getElementById("compoundResponse").innerHTML = "";
+                    break;
+            }
+
+        }
+
+function monthly() {
+
+    var interest = document.getElementById("intRate").innerHTML;
+    interest = interest.replace("%", "");
+    var parseInterest = parseInt(interest);
+    var intMonth = ((parseInterest / 12) / 100) +1;
+
+    return intMonth;
+    console.log(intMonth);
+
+}
+
+function annual() {
+
+    var interest = document.getElementById("intRate").innerHTML;
+    interest = interest.replace("%", "");
+    var parseInterest = parseInt(interest);
+    var intAnnual = (parseInterest / 100) + 1;
+
+    return intAnnual;
+    console.log(intAnnual);
+}
+
+
+function lenGth() {
+
+    var length = document.getElementById("length").innerHTML;
+    length = length.replace(" years", "");
+    return length;
+
+}
+
+
+function calculate() {
+
+    var intMonth = monthly();
+    var intAnnual = annual();
+    var deposit = parseInt(document.getElementById("deposit").value);
+    var interest = parseInt(interestR());
+    var length = parseInt(lenGth());
+    var powerMonth = length * 12;
+    var compFreq = document.getElementById("compFreq").querySelector;
+    var fail = "Incomplete Form";
+    var result = fail.fontcolor("red");
+
+
+
+        if (!isNaN(deposit, interest, length) && document.getElementById("compFreq").value == "monthly") {
+
+            document.getElementById("answer").innerHTML = (deposit * (Math.pow(intMonth, powerMonth))).toLocaleString('en-AU', { style: 'currency', currency: 'AUD' });
+            console.log(deposit * (Math.pow(intMonth, powerMonth)));
+            chart();
+
+        } else if (!isNaN(deposit, interest, length) && document.getElementById("compFreq").value == "annually") {
+
+            document.getElementById("answer").innerHTML = (deposit * (Math.pow(intAnnual, length))).toLocaleString('en-AU', { style: 'currency', currency: 'AUD' });
+            console.log(deposit * (Math.pow(intAnnual, length)));
+
+        } else {
+
+            document.getElementById("answer").innerHTML = result;
+
+        }
+
+    }
+
+function chart(plots){
+    var plots = parseInt(lenGth() * 12);
+
+    var data = [];
+    var initialPoint = new Date();
+    var date = initialPoint.getFullYear();
+    var deposit = parseInt(document.getElementById("deposit").value);
+    
+
+        for (var i = 0; i < plots; i++) {
+            var increment = date + i;
+            var intmonth = monthly();
+//            var climbPoint = (deposit * (Math.pow(intmonth, plots))).toLocaleString('en-AU', { style: 'currency', currency: 'AUD' })
+            var climbPoint = deposit * (Math.pow(intmonth, i));
+            var dataPoint = {x : increment, y : climbPoint};
+            data.push(dataPoint);
+            }
+}
+
+        </script>
+        <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+    </body>
+</html>
