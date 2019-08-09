@@ -1,16 +1,16 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 
-        <!-- ChartJS Core Library for Chart -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
+    <!-- Chart.js Core Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.js"></script>
 
     <title>Compound Interest Calculator</title>
     <style>
         body {
             font-family: Tahoma, Arial, Helvetica, sans-serif;
             font-size: small;
-            }
+        }
     </style>
 </head>
     <body>
@@ -37,6 +37,7 @@
             <p id="answer"></p>
             <button type="button" onclick="calculate()">Calculate</button>
             <button onclick="reset()">Reset</button>
+            <canvas id="myChart" width="400" height="400"></canvas>
         </form>
 
 
@@ -267,10 +268,11 @@ function chart(plots){
             var climbPoint = deposit * (Math.pow(intmonth, i));
             var dataPoint = {x : increment, y : climbPoint};
             data.push(dataPoint);
-            }
+            } 
 }
 
         </script>
-        <div id="chartContainer" style="height: 300px; width: 100%;"></div>
+
     </body>
+
 </html>
