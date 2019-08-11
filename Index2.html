@@ -210,7 +210,7 @@ function annual() {
 }
 
 
-function lenGth() {
+function getLength() {
 
     var length = document.getElementById("length").innerHTML;
     length = length.replace(" years", "");
@@ -225,7 +225,7 @@ function calculate() {
     var intAnnual = annual();
     var deposit = parseInt(document.getElementById("deposit").value);
     var interest = parseInt(interestR());
-    var length = parseInt(lenGth());
+    var length = parseInt(getLength());
     var powerMonth = length * 12;
     var compFreq = document.getElementById("compFreq").querySelector;
     var fail = "Incomplete Form";
@@ -253,20 +253,22 @@ function calculate() {
     }
 
 function chart(plots){
-    var plots = parseInt(lenGth() * 12);
+    var plots = parseInt(getLength() * 12);
 
     var data = [];
-    var initialPoint = new Date();
-    var date = initialPoint.getFullYear();
+    //var initialPoint = new Date();
+    //var date = initialPoint.getFullYear();
     var deposit = parseInt(document.getElementById("deposit").value);
     
 
         for (var i = 0; i <= plots; i++) {
-            var increment = date + i;
+            var dateForPlot = new Date();
+            var month = dateForPlot.getMonth() + i;
+            dateForPlot.setMonth(month);
             var intmonth = monthly();
 //            var climbPoint = (deposit * (Math.pow(intmonth, plots))).toLocaleString('en-AU', { style: 'currency', currency: 'AUD' })
             var climbPoint = deposit * (Math.pow(intmonth, i));
-            var dataPoint = {x : increment, y : climbPoint};
+            var dataPoint = {x : dateForPlot, y : climbPoint};
             data.push(dataPoint);
             } 
 }
